@@ -58,6 +58,7 @@ function powell(f, x0; step=1.0, ϵ=1e-5)
                 c = list[2][1]
             end
         end
+        i+=1
     end
 
     throw("Couldn't find minimum")

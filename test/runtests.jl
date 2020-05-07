@@ -8,4 +8,10 @@ using popkg, Test
     x, f = -24.5, x->x^2
     @test powell(f, x) == (0.0, 0.0)
 
+    @testset "exception" begin
+
+        @test_throws String powell(x->1, 6)
+
+    end
+
 end
