@@ -17,6 +17,8 @@ function powell(f, x0; step=1.0, ϵ=1e-5)
 
     i = 1
     maxIter = 10^6
+    maxStep = 5.0
+    #println("max2 = ",maxIter)
 
     while i < maxIter
 
@@ -44,7 +46,7 @@ function powell(f, x0; step=1.0, ϵ=1e-5)
             end
 
             list = sort([(a,f(a)), (b,f(b)), (c,f(c))], by = x -> x[2])
-
+            
 
             if f(d) > f(a)
                 far = sort([(a,abs(a-d)), (b,abs(b-d)), (c,abs(c-d))], by = x -> x[2])
@@ -57,11 +59,41 @@ function powell(f, x0; step=1.0, ϵ=1e-5)
                 b = list[1][1]
                 c = list[2][1]
             end
-        end
+        else
+            """
+            if d>maxStep
+                if f(d-maxStep)>f(d+maxStep)
+                    a = d+maxStep
+                else
+                    a = d-maxStep
+                end
+                far2 = sort([(a,abs(f(a)-f(d))), (b,abs(f(b)-f(d))), (c,abs(f(c)-f(d)))], by = x -> x[2])
+                final2 = sort([far2[1][1], far2[2][1], d])
+
+                a = final2[1]
+                b = final2[2]
+                c = final2[3]
+            end
+            """
+
+            x0 = x0 + maxStep
+
+            c = x0 + step
+
+            if f(x0)<f(c)
+                a = x0 - step
+            else
+                a = x0 + 2*step
+                a, c = c, a
+            end
+
+            b = x0
+            end
         i+=1
     end
 
     throw("Couldn't find minimum")
+    #return(a, b, c)
 
 end
 
